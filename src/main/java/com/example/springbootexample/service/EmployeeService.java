@@ -318,4 +318,8 @@ public class EmployeeService {
 
         return result;
     }
+
+    public Employee getEmployeeById(UUID creatorId) {
+        return employeeRepository.findById(creatorId).orElseThrow();
+    }
 }

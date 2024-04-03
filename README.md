@@ -12,9 +12,11 @@
 3. Изменение сущностей: 
 - добавление сотруднику признака должность с валидацией (руководитель может быть только один)
 - добавление адреса компании с связью один-к-одному
-- добавление сущности Task (задача)
+- добавление сущности Task (задача) 
+(id, creator, executor, status, parent, deadline)
 
 4. Инфра
+- **MAPSTRUCT**
 - добавление валидатора (придумать какой, можно **implements Validator**)
 - добавление GlobalExceptionHandler (@ControllerAdvice + @ExceptionHandler(Exception.class))
 - return new ResponseEntity<>(obj, HttpStatus.***);
