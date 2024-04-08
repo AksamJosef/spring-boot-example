@@ -1,6 +1,7 @@
 package com.example.springbootexample.dto;
 
 import com.example.springbootexample.enums.Citizenship;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

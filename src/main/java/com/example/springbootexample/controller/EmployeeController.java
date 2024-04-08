@@ -3,9 +3,13 @@ package com.example.springbootexample.controller;
 import com.example.springbootexample.dto.EmployeeDto;
 import com.example.springbootexample.enums.DepartmentKind;
 import com.example.springbootexample.service.EmployeeService;
+import com.example.springbootexample.validation.EmployeeValidator;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +30,8 @@ import java.util.UUID;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+
+    private final EmployeeValidator validator;
 
     @GetMapping("/add-default")
     public void createDefaultEmployee() {
@@ -58,8 +64,14 @@ public class EmployeeController {
     }
 
     @PostMapping("/add-employee")
-    public ResponseEntity<EmployeeDto> addNewEmployee(@RequestBody EmployeeDto employeeDto) {
-        return new ResponseEntity<>(employeeService.addNewEmployee(employeeDto), HttpStatus.BAD_REQUEST);
+    public EmployeeDto addNewEmployee(@RequestBody EmployeeDto employeeDto, BindingResult bindingResult) {
+        validator.validate(employeeDto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidationException();
+        }
+
+        return employeeService.addNewEmployee(employeeDto);
     }
 
     @PutMapping("/edit")

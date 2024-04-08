@@ -1,6 +1,6 @@
 package com.example.springbootexample.service;
 
-import com.example.springbootexample.CeoIsExistsException;
+import com.example.springbootexample.exception.CeoIsExistsException;
 import com.example.springbootexample.dto.CompanyDto;
 import com.example.springbootexample.dto.DepartmentDto;
 import com.example.springbootexample.dto.EmployeeDto;
@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -321,5 +322,9 @@ public class EmployeeService {
 
     public Employee getEmployeeById(UUID creatorId) {
         return employeeRepository.findById(creatorId).orElseThrow();
+    }
+
+    public Optional<Employee> getEmployeeByName(String name) {
+        return employeeRepository.findByName(name);
     }
 }
