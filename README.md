@@ -21,7 +21,10 @@
 - добавление валидатора (придумать какой, можно **implements Validator**)
 - добавление GlobalExceptionHandler (@ControllerAdvice + @ExceptionHandler(Exception.class))
 - return new ResponseEntity<>(obj, HttpStatus.***);
-- настройка аутентификации через Spring Security
+- **настройка аутентификации через Spring Security
+- добавление уникальности полю username
+- добавление типа для поля username
+- добавление Aspects**
 
 
 // streams + Collections + workflow 
