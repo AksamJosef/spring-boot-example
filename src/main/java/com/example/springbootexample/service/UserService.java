@@ -8,10 +8,11 @@ import com.example.springbootexample.entity.User;
 import com.example.springbootexample.mapper.UserMapper;
 import com.example.springbootexample.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,5 +50,32 @@ public class UserService {
                 .collect(Collectors.toSet()));
 
         return dto;
+    }
+
+    public UserDto getCurrent() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+            String username = userDetails.getUsername();
+
+            return repository.findByUsername(username)
+                    .map(mapper::toDto)
+                    .orElseThrow(() -> new UsernameNotFoundException("Пользователь с указанным username не найден"));
+        }
+
+        return null;
+    }
+
+    public Boolean banUser(UUID id) {
+        return repository.findById(id)
+                .map(user -> {
+                    user.setIsLocked(true);
+                    repository.save(user);
+                    return Boolean.TRUE;
+                })
+                .orElse(Boolean.FALSE);
     }
 }
